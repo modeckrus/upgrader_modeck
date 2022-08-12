@@ -29,102 +29,95 @@ void main() {
     await preferences.clear();
     return true;
   });
-
-  testWidgets('test Upgrader sharedInstance', (WidgetTester tester) async {
-    final upgrader1 = Upgrader.sharedInstance;
-    expect(upgrader1, isNotNull);
-    final upgrader2 = Upgrader.sharedInstance;
-    expect(upgrader2, isNotNull);
-    expect(upgrader1 == upgrader2, isTrue);
-  }, skip: false);
-
+  final androidId = 'com.larryaasen.upgrader';
+  final iosId = 'com.larryaasen.upgrader';
   testWidgets('test Upgrader class', (WidgetTester tester) async {
     final client = MockITunesSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(platform: TargetPlatform.iOS, client: client);
+    final upgrader = Upgrader(platform: TargetPlatform.iOS, client: client, androidId: androidId, iosId: iosId);
 
     expect(tester.takeException(), null);
     await tester.pumpAndSettle();
     try {
-      expect(upgrader_modeck.appName(), 'Upgrader');
+      expect(upgrader.appName(), 'Upgrader');
     } catch (e) {
-      expect(e, upgrader_modeck.notInitializedExceptionMessage);
+      expect(e, upgrader.notInitializedExceptionMessage);
     }
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '1.9.9',
             buildNumber: '400'));
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
     // Calling initialize() a second time should do nothing
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
-    expect(upgrader_modeck.appName(), 'Upgrader');
-    expect(upgrader_modeck.currentAppStoreVersion(), '5.6');
-    expect(upgrader_modeck.currentInstalledVersion(), '1.9.9');
-    expect(upgrader_modeck.isUpdateAvailable(), true);
+    expect(upgrader.appName(), 'Upgrader');
+    expect(upgrader.currentAppStoreVersion(), '5.6');
+    expect(upgrader.currentInstalledVersion(), '1.9.9');
+    expect(upgrader.isUpdateAvailable(), true);
 
-    upgrader_modeck.installAppStoreVersion('1.2.3');
-    expect(upgrader_modeck.currentAppStoreVersion(), '1.2.3');
+    upgrader.installAppStoreVersion('1.2.3');
+    expect(upgrader.currentAppStoreVersion(), '1.2.3');
   }, skip: false);
 
   testWidgets('test installAppStoreListingURL', (WidgetTester tester) async {
-    final upgrader_modeck = Upgrader();
-    upgrader_modeck.installAppStoreListingURL(
+    final upgrader = Upgrader(androidId: androidId, iosId: iosId);
+    upgrader.installAppStoreListingURL(
         'https://itunes.apple.com/us/app/google-maps-transit-food/id585027354?mt=8&uo=4');
 
-    expect(upgrader_modeck.currentAppStoreListingURL(),
+    expect(upgrader.currentAppStoreListingURL(),
         'https://itunes.apple.com/us/app/google-maps-transit-food/id585027354?mt=8&uo=4');
   }, skip: false);
 
   testWidgets('test UpgradeWidget', (WidgetTester tester) async {
     final client = MockITunesSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(
-        platform: TargetPlatform.iOS, client: client, debugLogging: true);
+    final upgrader = Upgrader(
+        platform: TargetPlatform.iOS, client: client, debugLogging: true, androidId: androidId, iosId: iosId);
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '0.9.9',
             buildNumber: '400'));
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
     var called = false;
     var notCalled = true;
-    upgrader_modeck.onUpdate = () {
+    upgrader.onUpdate = () {
       called = true;
       return true;
     };
-    upgrader_modeck.onIgnore = () {
+    upgrader.onIgnore = () {
       notCalled = false;
       return true;
     };
-    upgrader_modeck.onLater = () {
+    upgrader.onLater = () {
       notCalled = false;
       return true;
     };
 
-    expect(upgrader_modeck.isUpdateAvailable(), true);
-    expect(upgrader_modeck.isTooSoon(), false);
+    expect(upgrader.isUpdateAvailable(), true);
+    expect(upgrader.isTooSoon(), false);
 
-    expect(upgrader_modeck.messages, isNotNull);
+    expect(upgrader.messages, isNotNull);
 
-    expect(upgrader_modeck.messages.buttonTitleIgnore, 'IGNORE');
-    expect(upgrader_modeck.messages.buttonTitleLater, 'LATER');
-    expect(upgrader_modeck.messages.buttonTitleUpdate, 'UPDATE NOW');
-    expect(upgrader_modeck.messages.releaseNotes, 'Release Notes');
+    expect(upgrader.messages.buttonTitleIgnore, 'IGNORE');
+    expect(upgrader.messages.buttonTitleLater, 'LATER');
+    expect(upgrader.messages.buttonTitleUpdate, 'UPDATE NOW');
+    expect(upgrader.messages.releaseNotes, 'Release Notes');
 
-    upgrader_modeck.messages = MyUpgraderMessages();
+    upgrader.messages = MyUpgraderMessages();
 
-    expect(upgrader_modeck.messages.buttonTitleIgnore, 'aaa');
-    expect(upgrader_modeck.messages.buttonTitleLater, 'bbb');
-    expect(upgrader_modeck.messages.buttonTitleUpdate, 'ccc');
-    expect(upgrader_modeck.messages.releaseNotes, 'ddd');
+    expect(upgrader.messages.buttonTitleIgnore, 'aaa');
+    expect(upgrader.messages.buttonTitleLater, 'bbb');
+    expect(upgrader.messages.buttonTitleUpdate, 'ccc');
+    expect(upgrader.messages.releaseNotes, 'ddd');
 
-    await tester.pumpWidget(_MyWidget(upgrader_modeck: upgrader_modeck));
+    await tester.pumpWidget(_MyWidget(upgrader_modeck: upgrader));
 
     expect(find.text('Upgrader test'), findsOneWidget);
     expect(find.text('Upgrading'), findsOneWidget);
@@ -133,74 +126,74 @@ void main() {
     await tester.pumpAndSettle();
     await tester.pumpAndSettle();
 
-    expect(upgrader_modeck.isTooSoon(), true);
+    expect(upgrader.isTooSoon(), true);
 
-    expect(find.text(upgrader_modeck.messages.title), findsOneWidget);
-    expect(find.text(upgrader_modeck.message()), findsOneWidget);
-    expect(find.text(upgrader_modeck.messages.releaseNotes), findsOneWidget);
-    expect(find.text(upgrader_modeck.releaseNotes!), findsOneWidget);
-    expect(find.text(upgrader_modeck.messages.prompt), findsOneWidget);
+    expect(find.text(upgrader.messages.title), findsOneWidget);
+    expect(find.text(upgrader.message()), findsOneWidget);
+    expect(find.text(upgrader.messages.releaseNotes), findsOneWidget);
+    expect(find.text(upgrader.releaseNotes!), findsOneWidget);
+    expect(find.text(upgrader.messages.prompt), findsOneWidget);
     expect(find.byType(TextButton), findsNWidgets(3));
-    expect(find.text(upgrader_modeck.messages.buttonTitleIgnore), findsOneWidget);
-    expect(find.text(upgrader_modeck.messages.buttonTitleLater), findsOneWidget);
-    expect(find.text(upgrader_modeck.messages.buttonTitleUpdate), findsOneWidget);
-    expect(find.text(upgrader_modeck.messages.releaseNotes), findsOneWidget);
+    expect(find.text(upgrader.messages.buttonTitleIgnore), findsOneWidget);
+    expect(find.text(upgrader.messages.buttonTitleLater), findsOneWidget);
+    expect(find.text(upgrader.messages.buttonTitleUpdate), findsOneWidget);
+    expect(find.text(upgrader.messages.releaseNotes), findsOneWidget);
 
-    await tester.tap(find.text(upgrader_modeck.messages.buttonTitleUpdate));
+    await tester.tap(find.text(upgrader.messages.buttonTitleUpdate));
     await tester.pumpAndSettle();
-    expect(find.text(upgrader_modeck.messages.buttonTitleIgnore), findsNothing);
-    expect(find.text(upgrader_modeck.messages.buttonTitleLater), findsNothing);
-    expect(find.text(upgrader_modeck.messages.buttonTitleUpdate), findsNothing);
-    expect(find.text(upgrader_modeck.messages.releaseNotes), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleIgnore), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleLater), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleUpdate), findsNothing);
+    expect(find.text(upgrader.messages.releaseNotes), findsNothing);
     expect(called, true);
     expect(notCalled, true);
   }, skip: false);
 
   testWidgets('test UpgradeWidget Cupertino', (WidgetTester tester) async {
     final client = MockITunesSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(
-        platform: TargetPlatform.iOS, client: client, debugLogging: true);
+    final upgrader = Upgrader(
+        platform: TargetPlatform.iOS, client: client, debugLogging: true, androidId: androidId, iosId: iosId);
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '0.9.9',
             buildNumber: '400'));
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
     var called = false;
     var notCalled = true;
-    upgrader_modeck.onUpdate = () {
+    upgrader.onUpdate = () {
       called = true;
       return true;
     };
-    upgrader_modeck.onIgnore = () {
+    upgrader.onIgnore = () {
       notCalled = false;
       return true;
     };
-    upgrader_modeck.onLater = () {
+    upgrader.onLater = () {
       notCalled = false;
       return true;
     };
 
-    expect(upgrader_modeck.isUpdateAvailable(), true);
-    expect(upgrader_modeck.isTooSoon(), false);
+    expect(upgrader.isUpdateAvailable(), true);
+    expect(upgrader.isTooSoon(), false);
 
-    expect(upgrader_modeck.messages, isNotNull);
+    expect(upgrader.messages, isNotNull);
 
-    expect(upgrader_modeck.messages.buttonTitleIgnore, 'IGNORE');
-    expect(upgrader_modeck.messages.buttonTitleLater, 'LATER');
-    expect(upgrader_modeck.messages.buttonTitleUpdate, 'UPDATE NOW');
+    expect(upgrader.messages.buttonTitleIgnore, 'IGNORE');
+    expect(upgrader.messages.buttonTitleLater, 'LATER');
+    expect(upgrader.messages.buttonTitleUpdate, 'UPDATE NOW');
 
-    upgrader_modeck.messages = MyUpgraderMessages();
+    upgrader.messages = MyUpgraderMessages();
 
-    expect(upgrader_modeck.messages.buttonTitleIgnore, 'aaa');
-    expect(upgrader_modeck.messages.buttonTitleLater, 'bbb');
-    expect(upgrader_modeck.messages.buttonTitleUpdate, 'ccc');
-    upgrader_modeck.dialogStyle = UpgradeDialogStyle.cupertino;
+    expect(upgrader.messages.buttonTitleIgnore, 'aaa');
+    expect(upgrader.messages.buttonTitleLater, 'bbb');
+    expect(upgrader.messages.buttonTitleUpdate, 'ccc');
+    upgrader.dialogStyle = UpgradeDialogStyle.cupertino;
 
-    await tester.pumpWidget(_MyWidget(upgrader_modeck: upgrader_modeck));
+    await tester.pumpWidget(_MyWidget(upgrader_modeck: upgrader));
 
     expect(find.text('Upgrader test'), findsOneWidget);
     expect(find.text('Upgrading'), findsOneWidget);
@@ -209,131 +202,131 @@ void main() {
     await tester.pumpAndSettle();
     await tester.pumpAndSettle();
 
-    expect(upgrader_modeck.isTooSoon(), true);
+    expect(upgrader.isTooSoon(), true);
 
-    expect(find.text(upgrader_modeck.messages.title), findsOneWidget);
-    expect(find.text(upgrader_modeck.message()), findsOneWidget);
-    expect(find.text(upgrader_modeck.messages.releaseNotes), findsOneWidget);
-    expect(find.text(upgrader_modeck.releaseNotes!), findsOneWidget);
-    expect(find.text(upgrader_modeck.messages.prompt), findsOneWidget);
+    expect(find.text(upgrader.messages.title), findsOneWidget);
+    expect(find.text(upgrader.message()), findsOneWidget);
+    expect(find.text(upgrader.messages.releaseNotes), findsOneWidget);
+    expect(find.text(upgrader.releaseNotes!), findsOneWidget);
+    expect(find.text(upgrader.messages.prompt), findsOneWidget);
     expect(find.byType(CupertinoDialogAction), findsNWidgets(3));
-    expect(find.text(upgrader_modeck.messages.buttonTitleIgnore), findsOneWidget);
-    expect(find.text(upgrader_modeck.messages.buttonTitleLater), findsOneWidget);
-    expect(find.text(upgrader_modeck.messages.buttonTitleUpdate), findsOneWidget);
+    expect(find.text(upgrader.messages.buttonTitleIgnore), findsOneWidget);
+    expect(find.text(upgrader.messages.buttonTitleLater), findsOneWidget);
+    expect(find.text(upgrader.messages.buttonTitleUpdate), findsOneWidget);
 
-    await tester.tap(find.text(upgrader_modeck.messages.buttonTitleUpdate));
+    await tester.tap(find.text(upgrader.messages.buttonTitleUpdate));
     await tester.pumpAndSettle();
-    expect(find.text(upgrader_modeck.messages.buttonTitleIgnore), findsNothing);
-    expect(find.text(upgrader_modeck.messages.buttonTitleLater), findsNothing);
-    expect(find.text(upgrader_modeck.messages.buttonTitleUpdate), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleIgnore), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleLater), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleUpdate), findsNothing);
     expect(called, true);
     expect(notCalled, true);
   }, skip: false);
   testWidgets('test UpgradeWidget ignore', (WidgetTester tester) async {
     final client = MockITunesSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(platform: TargetPlatform.iOS, client: client);
+    final upgrader = Upgrader(platform: TargetPlatform.iOS, client: client, androidId: androidId, iosId: iosId);
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '0.9.9',
             buildNumber: '400'));
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
     var called = false;
     var notCalled = true;
-    upgrader_modeck.onIgnore = () {
+    upgrader.onIgnore = () {
       called = true;
       return true;
     };
-    upgrader_modeck.onUpdate = () {
+    upgrader.onUpdate = () {
       notCalled = false;
       return true;
     };
-    upgrader_modeck.onLater = () {
+    upgrader.onLater = () {
       notCalled = false;
       return true;
     };
 
-    expect(upgrader_modeck.isTooSoon(), false);
+    expect(upgrader.isTooSoon(), false);
 
-    await tester.pumpWidget(_MyWidget(upgrader_modeck: upgrader_modeck));
+    await tester.pumpWidget(_MyWidget(upgrader_modeck: upgrader));
 
     // Pump the UI so the upgrader_modeck can display its dialog
     await tester.pumpAndSettle();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text(upgrader_modeck.messages.buttonTitleIgnore));
+    await tester.tap(find.text(upgrader.messages.buttonTitleIgnore));
     await tester.pumpAndSettle();
-    expect(find.text(upgrader_modeck.messages.buttonTitleIgnore), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleIgnore), findsNothing);
     expect(called, true);
     expect(notCalled, true);
   }, skip: false);
 
   testWidgets('test UpgradeWidget later', (WidgetTester tester) async {
     final client = MockITunesSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(platform: TargetPlatform.iOS, client: client);
+    final upgrader = Upgrader(platform: TargetPlatform.iOS, client: client, androidId: androidId, iosId: iosId);
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '0.9.9',
             buildNumber: '400'));
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
     var called = false;
     var notCalled = true;
-    upgrader_modeck.onLater = () {
+    upgrader.onLater = () {
       called = true;
       return true;
     };
-    upgrader_modeck.onIgnore = () {
+    upgrader.onIgnore = () {
       notCalled = false;
       return true;
     };
-    upgrader_modeck.onUpdate = () {
+    upgrader.onUpdate = () {
       notCalled = false;
       return true;
     };
 
-    expect(upgrader_modeck.isTooSoon(), false);
+    expect(upgrader.isTooSoon(), false);
 
-    await tester.pumpWidget(_MyWidget(upgrader_modeck: upgrader_modeck));
+    await tester.pumpWidget(_MyWidget(upgrader_modeck: upgrader));
 
     // Pump the UI so the upgrader_modeck can display its dialog
     await tester.pumpAndSettle();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text(upgrader_modeck.messages.buttonTitleLater));
+    await tester.tap(find.text(upgrader.messages.buttonTitleLater));
     await tester.pumpAndSettle();
-    expect(find.text(upgrader_modeck.messages.buttonTitleLater), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleLater), findsNothing);
     expect(called, true);
     expect(notCalled, true);
   }, skip: false);
 
   testWidgets('test UpgradeWidget pop scope', (WidgetTester tester) async {
     final client = MockITunesSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(platform: TargetPlatform.iOS, client: client);
+    final upgrader = Upgrader(platform: TargetPlatform.iOS, client: client, androidId: androidId, iosId: iosId);
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '0.9.9',
             buildNumber: '400'));
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
     var called = false;
-    upgrader_modeck.shouldPopScope = () {
+    upgrader.shouldPopScope = () {
       called = true;
       return true;
     };
 
-    expect(upgrader_modeck.isTooSoon(), false);
+    expect(upgrader.isTooSoon(), false);
 
-    await tester.pumpWidget(_MyWidget(upgrader_modeck: upgrader_modeck));
+    await tester.pumpWidget(_MyWidget(upgrader_modeck: upgrader));
 
     // Pump the UI so the upgrader_modeck can display its dialog
     await tester.pumpAndSettle();
@@ -348,195 +341,196 @@ void main() {
 
   testWidgets('test UpgradeWidget Card upgrade', (WidgetTester tester) async {
     final client = MockITunesSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(
-        platform: TargetPlatform.iOS, client: client, debugLogging: true);
+    final upgrader = Upgrader(
+        platform: TargetPlatform.iOS, client: client, debugLogging: true, androidId: androidId, iosId: iosId);
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '0.9.9',
             buildNumber: '400'));
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
-    expect(upgrader_modeck.messages, isNotNull);
+    expect(upgrader.messages, isNotNull);
 
     var called = false;
     var notCalled = true;
-    upgrader_modeck.onUpdate = () {
+    upgrader.onUpdate = () {
       called = true;
       return true;
     };
-    upgrader_modeck.onLater = () {
+    upgrader.onLater = () {
       notCalled = false;
       return true;
     };
-    upgrader_modeck.onIgnore = () {
+    upgrader.onIgnore = () {
       notCalled = false;
       return true;
     };
 
-    expect(upgrader_modeck.isTooSoon(), false);
+    expect(upgrader.isTooSoon(), false);
 
-    await tester.pumpWidget(_MyWidgetCard(upgrader_modeck: upgrader_modeck));
+    await tester.pumpWidget(_MyWidgetCard(upgrader_modeck: upgrader));
 
     // Pump the UI so the upgrade card is displayed
     await tester.pumpAndSettle();
 
-    expect(find.text(upgrader_modeck.messages.releaseNotes), findsOneWidget);
-    expect(find.text(upgrader_modeck.releaseNotes!), findsOneWidget);
-    await tester.tap(find.text(upgrader_modeck.messages.buttonTitleUpdate));
+    expect(find.text(upgrader.messages.releaseNotes), findsOneWidget);
+    expect(find.text(upgrader.releaseNotes!), findsOneWidget);
+    await tester.tap(find.text(upgrader.messages.buttonTitleUpdate));
     await tester.pumpAndSettle();
 
     expect(called, true);
     expect(notCalled, true);
-    expect(find.text(upgrader_modeck.messages.buttonTitleUpdate), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleUpdate), findsNothing);
   }, skip: false);
 
   testWidgets('test UpgradeWidget Card ignore', (WidgetTester tester) async {
     final client = MockITunesSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(
-        platform: TargetPlatform.iOS, client: client, debugLogging: true);
+    final upgrader = Upgrader(
+        platform: TargetPlatform.iOS, client: client, debugLogging: true, androidId: androidId, iosId: iosId);
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '0.9.9',
             buildNumber: '400'));
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
     var called = false;
     var notCalled = true;
-    upgrader_modeck.onIgnore = () {
+    upgrader.onIgnore = () {
       called = true;
       return true;
     };
-    upgrader_modeck.onLater = () {
+    upgrader.onLater = () {
       notCalled = false;
       return true;
     };
-    upgrader_modeck.onUpdate = () {
+    upgrader.onUpdate = () {
       notCalled = false;
       return true;
     };
 
-    expect(upgrader_modeck.isTooSoon(), false);
+    expect(upgrader.isTooSoon(), false);
 
-    await tester.pumpWidget(_MyWidgetCard(upgrader_modeck: upgrader_modeck));
+    await tester.pumpWidget(_MyWidgetCard(upgrader_modeck: upgrader));
 
     // Pump the UI so the upgrade card is displayed
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text(upgrader_modeck.messages.buttonTitleIgnore));
+    await tester.tap(find.text(upgrader.messages.buttonTitleIgnore));
     await tester.pumpAndSettle();
 
     expect(called, true);
     expect(notCalled, true);
-    expect(find.text(upgrader_modeck.messages.buttonTitleIgnore), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleIgnore), findsNothing);
   }, skip: false);
 
   testWidgets('test UpgradeWidget Card later', (WidgetTester tester) async {
     final client = MockITunesSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(
-        platform: TargetPlatform.iOS, client: client, debugLogging: true);
+    final upgrader = Upgrader(
+        platform: TargetPlatform.iOS, client: client, debugLogging: true, androidId: androidId, iosId: iosId);
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '0.9.9',
             buildNumber: '400'));
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
     var called = false;
     var notCalled = true;
-    upgrader_modeck.onLater = () {
+    upgrader.onLater = () {
       called = true;
       return true;
     };
-    upgrader_modeck.onIgnore = () {
+    upgrader.onIgnore = () {
       notCalled = false;
       return true;
     };
-    upgrader_modeck.onUpdate = () {
+    upgrader.onUpdate = () {
       notCalled = false;
       return true;
     };
 
-    expect(upgrader_modeck.isTooSoon(), false);
+    expect(upgrader.isTooSoon(), false);
 
-    await tester.pumpWidget(_MyWidgetCard(upgrader_modeck: upgrader_modeck));
+    await tester.pumpWidget(_MyWidgetCard(upgrader_modeck: upgrader));
 
     // Pump the UI so the upgrade card is displayed
     await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-    await tester.tap(find.text(upgrader_modeck.messages.buttonTitleLater));
+    await tester.tap(find.text(upgrader.messages.buttonTitleLater));
     await tester.pumpAndSettle();
 
     expect(called, true);
     expect(notCalled, true);
-    expect(find.text(upgrader_modeck.messages.buttonTitleLater), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleLater), findsNothing);
   }, skip: false);
 
   testWidgets('test upgrader_modeck minAppVersion', (WidgetTester tester) async {
     final client = MockITunesSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(
-        platform: TargetPlatform.iOS, client: client, debugLogging: true);
-    upgrader_modeck.minAppVersion = '1.0.0';
+    final upgrader = Upgrader(
+        platform: TargetPlatform.iOS, client: client, debugLogging: true, androidId: androidId, iosId: iosId);
+    upgrader.minAppVersion = '1.0.0';
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '0.9.9',
             buildNumber: '400'));
-    await upgrader_modeck.initialize();
+    await upgrader.initialize();
 
-    expect(upgrader_modeck.isTooSoon(), false);
-    upgrader_modeck.minAppVersion = '0.5.0';
-    expect(upgrader_modeck.belowMinAppVersion(), false);
-    upgrader_modeck.minAppVersion = '1.0.0';
-    expect(upgrader_modeck.belowMinAppVersion(), true);
-    upgrader_modeck.minAppVersion = null;
-    expect(upgrader_modeck.belowMinAppVersion(), false);
-    upgrader_modeck.minAppVersion = 'empty';
-    expect(upgrader_modeck.belowMinAppVersion(), false);
-    upgrader_modeck.minAppVersion = '0.9.9+4';
-    expect(upgrader_modeck.belowMinAppVersion(), false);
-    upgrader_modeck.minAppVersion = '0.9.9-5.2.pre';
-    expect(upgrader_modeck.belowMinAppVersion(), false);
-    upgrader_modeck.minAppVersion = '1.0.0-5.2.pre';
-    expect(upgrader_modeck.belowMinAppVersion(), true);
+    expect(upgrader.isTooSoon(), false);
+    upgrader.minAppVersion = '0.5.0';
+    expect(upgrader.belowMinAppVersion(), false);
+    upgrader.minAppVersion = '1.0.0';
+    expect(upgrader.belowMinAppVersion(), true);
+    upgrader.minAppVersion = null;
+    expect(upgrader.belowMinAppVersion(), false);
+    upgrader.minAppVersion = 'empty';
+    expect(upgrader.belowMinAppVersion(), false);
+    upgrader.minAppVersion = '0.9.9+4';
+    expect(upgrader.belowMinAppVersion(), false);
+    upgrader.minAppVersion = '0.9.9-5.2.pre';
+    expect(upgrader.belowMinAppVersion(), false);
+    upgrader.minAppVersion = '1.0.0-5.2.pre';
+    expect(upgrader.belowMinAppVersion(), true);
 
-    upgrader_modeck.minAppVersion = '1.0.0';
+    upgrader.minAppVersion = '1.0.0';
 
-    await tester.pumpWidget(_MyWidgetCard(upgrader_modeck: upgrader_modeck));
+    await tester.pumpWidget(_MyWidgetCard(upgrader_modeck: upgrader));
 
     // Pump the UI so the upgrade card is displayed
     await tester.pumpAndSettle(const Duration(milliseconds: 5000));
 
-    expect(find.text(upgrader_modeck.messages.buttonTitleIgnore), findsNothing);
-    expect(find.text(upgrader_modeck.messages.buttonTitleLater), findsNothing);
-    expect(find.text(upgrader_modeck.messages.buttonTitleUpdate), findsOneWidget);
+    expect(find.text(upgrader.messages.buttonTitleIgnore), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleLater), findsNothing);
+    expect(find.text(upgrader.messages.buttonTitleUpdate), findsOneWidget);
   }, skip: false);
 
   testWidgets('test upgrader_modeck minAppVersion description android',
       (WidgetTester tester) async {
     final client = await MockPlayStoreSearchClient.setupMockClient();
-    final upgrader_modeck = Upgrader(
-        platform: TargetPlatform.android, client: client, debugLogging: true);
+    final upgrader = Upgrader(
+        platform: TargetPlatform.android, client: client, debugLogging: true, androidId: androidId, iosId: iosId);
 
-    upgrader_modeck.installPackageInfo(
+    upgrader.installPackageInfo(
         packageInfo: PackageInfo(
-            appName: 'Upgrader',
-            packageName: 'com.testing.test2',
-            version: '2.9.9',
-            buildNumber: '400'));
-    await upgrader_modeck.initialize();
-
-    expect(upgrader_modeck.belowMinAppVersion(), true);
-    expect(upgrader_modeck.minAppVersion, '4.5.6');
+            appName: 'Money Friends',
+            packageName: 'com.moneyfriends',
+            version: '2.0.81',
+            buildNumber: '139'));
+    await upgrader.initialize();
+    final belowMinAppVersion = upgrader.belowMinAppVersion();
+    final minAppVersion = upgrader.minAppVersion;
+    expect(belowMinAppVersion, true);
+    expect(minAppVersion, '4.5.6');
   }, skip: false);
 
   testWidgets('test upgrader_modeck minAppVersion description ios',
@@ -545,12 +539,12 @@ void main() {
       description: 'Use this app. [:mav: 4.5.6]',
     );
     final upgrader_modeck = Upgrader(
-        platform: TargetPlatform.iOS, client: client, debugLogging: true);
+        platform: TargetPlatform.iOS, client: client, debugLogging: true, androidId: androidId, iosId: iosId);
 
     upgrader_modeck.installPackageInfo(
         packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '2.9.9',
             buildNumber: '400'));
     await upgrader_modeck.initialize();
@@ -565,7 +559,7 @@ void main() {
         platform: TargetPlatform.iOS,
         client: client,
         debugLogging: true,
-        countryCode: 'IT');
+        countryCode: 'IT', androidId: androidId, iosId: iosId);
 
     upgrader_modeck.installPackageInfo(
         packageInfo: PackageInfo(
@@ -613,11 +607,11 @@ void main() {
           client: client,
           debugLogging: true,
           appcastConfig: fakeAppcast.config,
-          appcast: fakeAppcast)
+          appcast: fakeAppcast, androidId: androidId, iosId: iosId)
         ..installPackageInfo(
           packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '1.9.6',
             buildNumber: '42',
           ),
@@ -629,16 +623,16 @@ void main() {
     }, skip: false);
 
     test('durationUntilAlertAgain defaults to 3 days', () async {
-      final upgrader_modeck = Upgrader();
+      final upgrader_modeck = Upgrader( androidId: androidId, iosId: iosId);
       expect(upgrader_modeck.durationUntilAlertAgain, const Duration(days: 3));
     }, skip: false);
 
     test('durationUntilAlertAgain is 0 days', () async {
       final upgrader_modeck =
-          Upgrader(durationUntilAlertAgain: const Duration(seconds: 0));
+          Upgrader(durationUntilAlertAgain: const Duration(seconds: 0), androidId: androidId, iosId: iosId);
       expect(upgrader_modeck.durationUntilAlertAgain, const Duration(seconds: 0));
 
-      UpgradeAlert(upgrader_modeck: upgrader_modeck);
+      UpgradeAlert(upgrader: upgrader_modeck);
       expect(upgrader_modeck.durationUntilAlertAgain, const Duration(seconds: 0));
 
       UpgradeCard(upgrader_modeck: upgrader_modeck);
@@ -647,25 +641,25 @@ void main() {
 
     test('durationUntilAlertAgain card is valid', () async {
       final upgrader_modeck =
-          Upgrader(durationUntilAlertAgain: const Duration(days: 3));
+          Upgrader(durationUntilAlertAgain: const Duration(days: 3), androidId: androidId, iosId: iosId);
       UpgradeCard(upgrader_modeck: upgrader_modeck);
       expect(upgrader_modeck.durationUntilAlertAgain, const Duration(days: 3));
 
       final upgrader2 =
-          Upgrader(durationUntilAlertAgain: const Duration(days: 10));
+          Upgrader(durationUntilAlertAgain: const Duration(days: 10), androidId: androidId, iosId: iosId);
       final _ = UpgradeCard(upgrader_modeck: upgrader2);
       expect(upgrader2.durationUntilAlertAgain, const Duration(days: 10));
     }, skip: false);
 
     test('durationUntilAlertAgain alert is valid', () async {
       final upgrader_modeck =
-          Upgrader(durationUntilAlertAgain: const Duration(days: 3));
-      UpgradeAlert(upgrader_modeck: upgrader_modeck);
+          Upgrader(durationUntilAlertAgain: const Duration(days: 3), androidId: androidId, iosId: iosId);
+      UpgradeAlert(upgrader: upgrader_modeck);
       expect(upgrader_modeck.durationUntilAlertAgain, const Duration(days: 3));
 
       final upgrader2 =
-          Upgrader(durationUntilAlertAgain: const Duration(days: 10));
-      UpgradeAlert(upgrader_modeck: upgrader2);
+          Upgrader(durationUntilAlertAgain: const Duration(days: 10), androidId: androidId, iosId: iosId);
+      UpgradeAlert(upgrader: upgrader2);
       expect(upgrader2.durationUntilAlertAgain, const Duration(days: 10));
     }, skip: false);
   });
@@ -674,7 +668,7 @@ void main() {
     test('should respect debugDisplayAlways property', () {
       final client = MockITunesSearchClient.setupMockClient();
       final upgrader_modeck = Upgrader(
-          platform: TargetPlatform.iOS, client: client, debugLogging: true);
+          platform: TargetPlatform.iOS, client: client, debugLogging: true, androidId: androidId, iosId: iosId);
 
       expect(upgrader_modeck.shouldDisplayUpgrade(), false);
       upgrader_modeck.debugDisplayAlways = true;
@@ -719,12 +713,12 @@ void main() {
       final upgrader_modeck = Upgrader(
           debugLogging: true,
           platform: TargetPlatform.iOS,
-          client: MockITunesSearchClient.setupMockClient())
+          client: MockITunesSearchClient.setupMockClient(), androidId: androidId, iosId: iosId)
         ..minAppVersion = '2.0.0'
         ..installPackageInfo(
           packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '1.9.6',
             buildNumber: '42',
           ),
@@ -755,11 +749,11 @@ void main() {
       final upgrader_modeck = Upgrader(
           debugLogging: true,
           platform: TargetPlatform.iOS,
-          client: MockITunesSearchClient.setupMockClient())
+          client: MockITunesSearchClient.setupMockClient(), androidId: androidId, iosId: iosId)
         ..installPackageInfo(
           packageInfo: PackageInfo(
             appName: 'Upgrader',
-            packageName: 'com.larryaasen.upgrader_modeck',
+            packageName: 'com.larryaasen.upgrader',
             version: '2.0.0',
             buildNumber: '42',
           ),
@@ -776,7 +770,7 @@ void main() {
       final upgrader_modeck = Upgrader(
           client: MockITunesSearchClient.setupMockClient(),
           platform: TargetPlatform.iOS,
-          debugLogging: true)
+          debugLogging: true, androidId: androidId, iosId: iosId)
         ..installPackageInfo(
           packageInfo: PackageInfo(
             appName: '',
@@ -852,7 +846,7 @@ class _MyWidget extends StatelessWidget {
           title: const Text('Upgrader test'),
         ),
         body: UpgradeAlert(
-            upgrader_modeck: upgrader_modeck,
+            upgrader: upgrader_modeck,
             child: Column(
               children: const <Widget>[Text('Upgrading')],
             )),

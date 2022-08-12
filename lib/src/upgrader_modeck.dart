@@ -50,7 +50,7 @@ class AppcastConfiguration {
 }
 
 /// Creates a shared instance of [Upgrader].
-late Upgrader _sharedInstance = Upgrader();
+// late Upgrader _sharedInstance = Upgrader();
 
 /// A class to configure the upgrade dialog.
 class Upgrader {
@@ -147,7 +147,8 @@ class Upgrader {
 
   final notInitializedExceptionMessage =
       'initialize() not called. Must be called first.';
-
+  final String androidId;
+  final String iosId;
   Upgrader({
     this.appcastConfig,
     this.appcast,
@@ -170,6 +171,8 @@ class Upgrader {
     this.minAppVersion,
     this.dialogStyle = UpgradeDialogStyle.material,
     TargetPlatform? platform,
+    required this.androidId,
+    required this.iosId,
   })  : client = client ?? http.Client(),
         messages = messages ?? UpgraderMessages(),
         platform = platform ?? defaultTargetPlatform {
@@ -177,7 +180,7 @@ class Upgrader {
   }
 
   /// A shared instance of [Upgrader].
-  static get sharedInstance => _sharedInstance;
+  // static get sharedInstance => _sharedInstance;
 
   void installPackageInfo({PackageInfo? packageInfo}) {
     _packageInfo = packageInfo;
@@ -232,14 +235,14 @@ class Upgrader {
       }
     }
 
-    await _updateVersionInfo();
+    await _updateVersionInfo(androidId: androidId, iosId: iosId);
 
     _installedVersion = _packageInfo!.version;
 
     return true;
   }
 
-  Future<bool> _updateVersionInfo() async {
+  Future<bool> _updateVersionInfo({required String androidId, required String iosId}) async {
     // If there is an appcast for this platform
     if (_isAppcastThisPlatform()) {
       if (debugLogging) {
@@ -281,7 +284,7 @@ class Upgrader {
       // Get Android version from Google Play Store, or
       // get iOS version from iTunes Store.
       if (platform == TargetPlatform.android) {
-        await _getAndroidStoreVersion(country: country);
+        await _getAndroidStoreVersion(country: country, androidId: androidId, iosId: iosId);
       } else if (platform == TargetPlatform.iOS) {
         final iTunes = ITunesSearchAPI();
         iTunes.client = client;
@@ -307,13 +310,14 @@ class Upgrader {
   }
 
   /// Android info is fetched by parsing the html of the app store page.
-  Future<bool?> _getAndroidStoreVersion({String? country}) async {
+  Future<bool?> _getAndroidStoreVersion({String? country, required String androidId, required String iosId}) async {
     final id = _packageInfo!.packageName;
     Map? results;
     final iTunes = ITunesSearchAPI();
+    country ??= 'US';
     results = await iTunes.lookupByBundleId(
       id,
-      country: countryCode,
+      country: country,
     );
     if (results == null) {
       return false;

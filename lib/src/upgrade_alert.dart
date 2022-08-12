@@ -11,13 +11,13 @@ class UpgradeAlert extends UpgradeBase {
   final Widget? child;
 
   /// Creates a new [UpgradeAlert].
-  UpgradeAlert({Key? key, Upgrader? upgrader_modeck, this.child})
-      : super(upgrader_modeck ?? Upgrader.sharedInstance, key: key);
+  UpgradeAlert({Key? key, required Upgrader upgrader, this.child})
+      : super(upgrader, key: key);
 
   /// Describes the part of the user interface represented by this widget.
   @override
   Widget build(BuildContext context, UpgradeBaseState state) {
-    if (upgrader_modeck.debugLogging) {
+    if (upgrader.debugLogging) {
       print('upgrader_modeck: build UpgradeAlert');
     }
 
@@ -27,7 +27,7 @@ class UpgradeAlert extends UpgradeBase {
           if (processed.connectionState == ConnectionState.done &&
               processed.data != null &&
               processed.data!) {
-            upgrader_modeck.checkVersion(context: context);
+            upgrader.checkVersion(context: context);
           }
           return child ?? Container();
         });

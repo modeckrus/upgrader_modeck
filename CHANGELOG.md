@@ -1,6 +1,9 @@
 ## [Unreleased]
 
 Updated the Play Store API request to include the country code, and added cache buster to break the HTTP caching.
+## [4.7.0]
+
+- Fix Russian Play Store API request.
 ## [4.6.0]
 
 - Fix Russian Play Store API request.

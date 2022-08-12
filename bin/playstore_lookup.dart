@@ -6,14 +6,11 @@
   Usage:
   $  dart playstore_lookup.dart id=com.google.android.apps.mapslite
  */
-
-import 'package:upgrader_modeck/src/itunes_search_api.dart';
-import 'package:upgrader_modeck/src/play_store_search_api.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 
 void main(List<String> arguments) async {
-  const defaultLookupBundleId = 'com.google.Maps';
-  var lookupBundleId = defaultLookupBundleId;
-  String? lookupAppId;
+  const defaultLookupId = 'com.google.android.apps.mapslite';
+  var lookupId = defaultLookupId;
 
   if (arguments.length == 1) {
     final arg0 = arguments[0].split('=');
@@ -21,50 +18,32 @@ void main(List<String> arguments) async {
       final argName = arg0[0];
       final argValue = arg0[1];
 
-      if (argName == 'bundleid') {
-        lookupBundleId = argValue;
-      } else if (argName == 'appid') {
-        lookupAppId = argValue;
+      if (argName == 'id') {
+        lookupId = argValue;
       }
     }
   }
 
-  final iTunes = ITunesSearchAPI();
-  iTunes.debugEnabled = true;
-  const countryCode = 'US';
+  final playStore = PlayStoreSearchAPI();
+  playStore.debugEnabled = true;
 
-  Map? results;
-  if (lookupAppId != null) {
-    results = await iTunes.lookupById(
-      lookupAppId,
-      country: countryCode,
-    );
-  } else {
-    results = await iTunes.lookupByBundleId(
-      lookupBundleId,
-      country: countryCode,
-    );
-  }
+  final results = await playStore.lookupById(lookupId);
 
   if (results == null) {
-    print('itunes_lookup there are no results');
+    print('playstore_lookup there are no results');
     return;
   }
 
-  final bundleId = ITunesResults.bundleId(results);
-  final description = ITunesResults.description(results);
-  final minAppVersion = ITunesResults.minAppVersion(results);
-  final releaseNotes = ITunesResults.releaseNotes(results);
-  final trackViewUrl = ITunesResults.trackViewUrl(results);
-  final version = ITunesResults.version(results);
+  final description = PlayStoreResults.description(results);
+  final minAppVersion = PlayStoreResults.minAppVersion(results);
+  final releaseNotes = PlayStoreResults.releaseNotes(results);
+  final version = PlayStoreResults.version(results);
 
-  print('itunes_lookup bundleId: $bundleId');
-  print('itunes_lookup description: $description');
-  print('itunes_lookup minAppVersion: $minAppVersion');
-  print('itunes_lookup releaseNotes: $releaseNotes');
-  print('itunes_lookup trackViewUrl: $trackViewUrl');
-  print('itunes_lookup version: $version');
+  print('playstore_lookup description: $description');
+  print('playstore_lookup minAppVersion: $minAppVersion');
+  print('playstore_lookup releaseNotes: $releaseNotes');
+  print('playstore_lookup version: $version');
 
-  print('itunes_lookup all results:\n$results');
+  print('playstore_lookup all results:\n$results');
   return;
 }
