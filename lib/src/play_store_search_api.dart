@@ -30,7 +30,7 @@ class PlayStoreSearchAPI {
     final response = await client!.get(Uri.parse(url));
 
     if (response.statusCode != 200) {
-      print('upgrader: Can\'t find an app in the Play Store with the id: $id');
+      print('upgrader_modeck: Can\'t find an app in the Play Store with the id: $id');
       return null;
     }
 
@@ -96,7 +96,7 @@ class PlayStoreResults {
       final description = descriptionElement.text;
       return description;
     } catch (e) {
-      print('upgrader: PlayStoreResults.redesignedDescription exception: $e');
+      print('upgrader_modeck: PlayStoreResults.redesignedDescription exception: $e');
     }
     return null;
   }
@@ -121,12 +121,12 @@ class PlayStoreResults {
             version = Version.parse(mav);
           } on Exception catch (e) {
             print(
-                'upgrader: PlayStoreResults.minAppVersion: $tagName error: $e');
+                'upgrader_modeck: PlayStoreResults.minAppVersion: $tagName error: $e');
           }
         }
       }
     } on Exception catch (e) {
-      print('upgrader.PlayStoreResults.minAppVersion : $e');
+      print('upgrader_modeck.PlayStoreResults.minAppVersion : $e');
     }
     return version;
   }
@@ -165,7 +165,7 @@ class PlayStoreResults {
 
       return releaseNotes;
     } catch (e) {
-      print('upgrader: PlayStoreResults.redesignedReleaseNotes exception: $e');
+      print('upgrader_modeck: PlayStoreResults.redesignedReleaseNotes exception: $e');
     }
     return null;
   }
@@ -248,7 +248,7 @@ class PlayStoreResults {
       // storeVersion might be: 'Varies with device', which is not a valid version.
       version = Version.parse(storeVersion).toString();
     } catch (e) {
-      print('upgrader: PlayStoreResults.redesignedVersion exception: $e');
+      print('upgrader_modeck: PlayStoreResults.redesignedVersion exception: $e');
     }
 
     return version;

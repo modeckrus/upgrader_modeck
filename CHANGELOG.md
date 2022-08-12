@@ -1,7 +1,9 @@
 ## [Unreleased]
 
 Updated the Play Store API request to include the country code, and added cache buster to break the HTTP caching.
+## [4.6.0]
 
+- Fix Russian Play Store API request.
 ## [4.5.0]
 
 - Added German releaseNotes translation. (thanks to @LenhartStephan)
@@ -44,7 +46,7 @@ This is a pre-release to allow for testing with a large amount of developers.
 
 - After the latest update to the Play Store, the Android app version was not being
 found on the Play Store. This has been resolved.
-- Changed the "upgrader: instantiated." message to be behind debugLogging.
+- Changed the "upgrader_modeck: instantiated." message to be behind debugLogging.
 
 ## [4.2.1-alpha.2]
 
@@ -98,7 +100,7 @@ minAppVersion, installedVersion, and appStoreVersion parameters.
 
 ## 4.0.0-alpha.3
 
-Moved the upgrader parameter for UpgradeCard to a named parameter.
+Moved the upgrader_modeck parameter for UpgradeCard to a named parameter.
 
 There are no new features, no feature updates, and no bug fixes in this release.
 
@@ -138,7 +140,7 @@ and with the README.
 * Added new language translation for Khmer ('km').
 * Added new language translation for Haitian Creole ('ht').
 * Added new language translation for Japanese ('ja').
-* Added new callback: `willDisplayUpgrade`: called when `upgrader` determines that
+* Added new callback: `willDisplayUpgrade`: called when `upgrader_modeck` determines that
 an upgrade may or may not be displayed, defaults to ```null```. The `value`
 parameter will be true when it should be displayed, and false when it should not
 be displayed. One good use for this callback is logging metrics for your app.

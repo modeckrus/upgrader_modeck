@@ -2,7 +2,7 @@
 
 workflows:
     flutter-package:
-        name: upgrader
+        name: upgrader_modeck
         environment:
             flutter: stable
         scripts:

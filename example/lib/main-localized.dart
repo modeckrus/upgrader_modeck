@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,13 +73,13 @@ class DemoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appcastURL =
-        'https://raw.githubusercontent.com/larryaasen/upgrader/master/test/testappcast.xml';
+        'https://raw.githubusercontent.com/larryaasen/upgrader_modeck/master/test/testappcast.xml';
     final cfg = AppcastConfiguration(url: appcastURL, supportedOS: ['android']);
 
     return Scaffold(
         appBar: AppBar(title: Text(DemoLocalizations.of(context).title)),
         body: UpgradeAlert(
-          upgrader: Upgrader(
+          upgrader_modeck: Upgrader(
             appcastConfig: cfg,
             debugLogging: true,
             messages: MyUpgraderMessages(code: 'es'),

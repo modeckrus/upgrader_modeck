@@ -2,11 +2,11 @@
 
 Flutter package for prompting users to upgrade when there is a newer version of the app in the store.
 
-[![Build Status](https://travis-ci.com/larryaasen/upgrader.svg?branch=master)](https://app.travis-ci.com/github/larryaasen/upgrader)
+[![Build Status](https://travis-ci.com/larryaasen/upgrader_modeck.svg?branch=master)](https://app.travis-ci.com/github/larryaasen/upgrader_modeck)
 [![Codemagic](https://api.codemagic.io/apps/5ffb7888eb8402dcd1928753/flutter-package/status_badge.svg)](https://codemagic.io/apps/5ffb7888eb8402dcd1928753/flutter-package/latest_build)
-[![codecov](https://codecov.io/gh/larryaasen/upgrader/branch/master/graph/badge.svg)](https://app.codecov.io/gh/larryaasen/upgrader)
-[![pub package](https://img.shields.io/pub/v/upgrader.svg)](https://pub.dartlang.org/packages/upgrader)
-[![GitHub Stars](https://img.shields.io/github/stars/larryaasen/upgrader.svg)](https://github.com/larryaasen/upgrader/stargazers)
+[![codecov](https://codecov.io/gh/larryaasen/upgrader_modeck/branch/master/graph/badge.svg)](https://app.codecov.io/gh/larryaasen/upgrader_modeck)
+[![pub package](https://img.shields.io/pub/v/upgrader_modeck.svg)](https://pub.dartlang.org/packages/upgrader_modeck)
+[![GitHub Stars](https://img.shields.io/github/stars/larryaasen/upgrader_modeck.svg)](https://github.com/larryaasen/upgrader_modeck/stargazers)
 <a href="https://www.buymeacoffee.com/larryaasen">
   <img alt="Buy me a coffee" src="https://img.shields.io/badge/Donate-Buy%20Me%20A%20Coffee-yellow.svg">
 </a>
@@ -25,7 +25,7 @@ The UI comes in two flavors: alert or card. The [UpgradeAlert](#alert-example) c
 popup alert prompt, and the [UpgradeCard](#card-example) class is used to display the inline material design card.
 
 ### Localization
-The text displayed in the `upgrader` package is localized in [many languages](#language-localization), and supports customization.
+The text displayed in the `upgrader_modeck` package is localized in [many languages](#language-localization), and supports customization.
 
 ### Release Notes
 The release notes are displayed by default when a new version is available. On Android
@@ -47,7 +47,7 @@ description field.
 Just wrap your body widget in the `UpgradeAlert` widget, and it will handle the rest.
 ```dart
 import 'package:flutter/material.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 
 void main() => runApp(MyApp());
 
@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
 You can also display a Cupertino style dialog by using the `dialogStyle` parameter.
 ```dart
           body: UpgradeAlert(
-            upgrader: Upgrader(dialogStyle: UpgradeDialogStyle.cupertino),
+            upgrader_modeck: Upgrader(dialogStyle: UpgradeDialogStyle.cupertino),
             child: Center(child: Text('Checking...')),
           )
 ```
@@ -115,7 +115,7 @@ The Upgrader class can be customized by setting parameters in the constructor.
 * debugLogging: display logging statements, which defaults to ```false```
 * dialogStyle: the upgrade dialog style, either ```material``` or ```cupertino```, defaults to ```material```, used only by UpgradeAlert, works on Android and iOS.
 * durationUntilAlertAgain: duration until alerting user again, which defaults to ```3 days```
-* messages: optional localized messages used for display in `upgrader`
+* messages: optional localized messages used for display in `upgrader_modeck`
 * minAppVersion: the minimum app version supported by this app. Earlier versions of this app will be forced to update to the current version. Defaults to ```null```.
 * onIgnore: called when the ignore button is tapped, defaults to ```null```
 * onLater: called when the later button is tapped, defaults to ```null```
@@ -125,11 +125,11 @@ The Upgrader class can be customized by setting parameters in the constructor.
 * showIgnore: hide or show Ignore button, which defaults to ```true```
 * showLater: hide or show Later button, which defaults to ```true```
 * showReleaseNotes: hide or show release notes, which defaults to ```true```
-* willDisplayUpgrade: called when ```upgrader``` determines that an upgrade may
+* willDisplayUpgrade: called when ```upgrader_modeck``` determines that an upgrade may
 or may not be displayed, defaults to ```null```
 
 ### Minimum App Version
-The `upgrader` package can use a forced upgrade version (minimum app version)
+The `upgrader_modeck` package can use a forced upgrade version (minimum app version)
 simply by adding that 
 version number to the description field in the app stores. Use this format:
 ```
@@ -140,7 +140,7 @@ Using that text says that the minimum app version is 1.2.3 and that earlier
 versions of this app will be forced to update to the current version.
 
 After the app containing this text has been submitted for review, approved, and
-released on the app store, the version number will be visible to the upgrader
+released on the app store, the version number will be visible to the upgrader_modeck
 package. When the minimum app version is updated in the future, all previously
 installed apps with this package (version 3.9.0+) will recognize and honor
 that value.
@@ -159,11 +159,11 @@ UpgradeAlert(Upgrader(shouldPopScope: () => true));
 ## Country Code
 
 On iOS, when your app is _not_ in the `US` App Store, which is the default, you must use
-the `countryCode` parameter mentioned above. The `upgrader` package does not know
+the `countryCode` parameter mentioned above. The `upgrader_modeck` package does not know
 which country app store to use because it is not provided by iOS. It assumes
 the app is in the `US` App Store.
 
-On Android, the `upgrader` package uses the system locale to determine the country code.
+On Android, the `upgrader_modeck` package uses the system locale to determine the country code.
 
 ## Limitations
 These widgets work on both Android and iOS. When running on Android the Google
@@ -176,7 +176,7 @@ On Android, the version number is often not available from the Google Play
 Store, such as with the
 [Google Maps](https://play.google.com/store/apps/details?id=com.google.android.apps.maps)
 app. In this case, the version is listed as `Varies with device`. That is not a
-valid version for `upgrader` and cannot be used. The `upgrader` widget will not be
+valid version for `upgrader_modeck` and cannot be used. The `upgrader_modeck` widget will not be
 displayed in this case.
 
 There is an [appcast](#appcast) that can be used to remotely configure the
@@ -184,7 +184,7 @@ latest app version. See [appcast](#appcast) below for more details.
 
 ## Appcast
 
-The class [Appcast](lib/src/appcast.dart), in this Flutter package, is used by the `upgrader` widgets
+The class [Appcast](lib/src/appcast.dart), in this Flutter package, is used by the `upgrader_modeck` widgets
 to download app details from an appcast,
 based on the [Sparkle](https://sparkle-project.org/) framework by Andy Matuschak.
 You can read the Sparkle documentation here:
@@ -192,13 +192,13 @@ https://sparkle-project.org/documentation/publishing/.
 
 An appcast is an RSS feed with one channel that has a collection of items that each describe
 one app version. The appcast will describe each app version and will provide the latest app
-version to `upgrader` that indicates when an upgrade should be recommended.
+version to `upgrader_modeck` that indicates when an upgrade should be recommended.
 
 The appcast must be hosted on a server that can be reached by everyone from the app. The appcast
 XML file can be autogenerated during the release process, or just manually updated after a release
 is available on the app store.
 
-The Appcast class can be used stand alone or as part of `upgrader`.
+The Appcast class can be used stand alone or as part of `upgrader_modeck`.
 
 ### Appcast Example
 This is an Appcast example for Android.
@@ -208,7 +208,7 @@ Widget build(BuildContext context) {
   // On Android, setup the Appcast.
   // On iOS, the default behavior will be to use the App Store version.
   final appcastURL =
-      'https://raw.githubusercontent.com/larryaasen/upgrader/master/test/testappcast.xml';
+      'https://raw.githubusercontent.com/larryaasen/upgrader_modeck/master/test/testappcast.xml';
   final cfg = AppcastConfiguration(url: appcastURL, supportedOS: ['android']);
 
   return MaterialApp(
@@ -244,13 +244,13 @@ Widget build(BuildContext context) {
 ### Appcast Class
 ```dart
 final appcast = Appcast();
-final items = await appcast.parseAppcastItemsFromUri('https://raw.githubusercontent.com/larryaasen/upgrader/master/test/testappcast.xml');
+final items = await appcast.parseAppcastItemsFromUri('https://raw.githubusercontent.com/larryaasen/upgrader_modeck/master/test/testappcast.xml');
 final bestItem = appcast.bestItem();
 ```
 
 ## Customizing the display
 
-The strings displayed in `upgrader` can be customzied by extending the `UpgraderMessages` class
+The strings displayed in `upgrader_modeck` can be customzied by extending the `UpgraderMessages` class
 to provide custom values.
 
 As an example, to replace the Ignore button with a custom value, first create a new
@@ -269,7 +269,7 @@ UpgradeAlert(Upgrader(messages: MyUpgraderMessages()));
 
 ## Language localization
 
-The strings displayed in `upgrader` are already localized in 29 languages. New languages will be
+The strings displayed in `upgrader_modeck` are already localized in 29 languages. New languages will be
 supported in the future with minor updates.
 
 Languages supported:
@@ -303,7 +303,7 @@ Languages supported:
 * Ukrainian ('uk')
 * Vietnamese ('vi')
 
-The `upgrader` package can be supplied with additional languages in your code by extending the `UpgraderMessages` class
+The `upgrader_modeck` package can be supplied with additional languages in your code by extending the `UpgraderMessages` class
 to provide custom values.
 
 As an example, to add the Spanish (es) language (which is already provided), first create a new
@@ -342,7 +342,7 @@ class MySpanishMessages extends UpgraderMessages {
 UpgradeAlert(Upgrader(messages: MySpanishMessages()));
 ```
 
-You can even force the `upgrader` package to use a specific language, instead of the
+You can even force the `upgrader_modeck` package to use a specific language, instead of the
 system language on the device. Just pass the language code to an instance of
 UpgraderMessages when displaying the alert or card. Here is an example:
 
@@ -352,13 +352,13 @@ UpgradeAlert(Upgrader(messages: UpgraderMessages(code: 'es')));
 
 ## Semantic Versioning
 
-The `upgrader` package uses the [version](https://pub.dev/packages/version) package that
+The `upgrader_modeck` package uses the [version](https://pub.dev/packages/version) package that
 is in compliance with the Semantic Versioning spec at http://semver.org/.
 
 
 ## iTunes Search API
 
-There is a class in this Flutter package used by the `upgrader` widgets to download app details
+There is a class in this Flutter package used by the `upgrader_modeck` widgets to download app details
 from the
 [iTunes Search API](https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api).
 The class ITunesSearchAPI can be used standalone to query iTunes for app details.
@@ -399,8 +399,8 @@ $ dart itunes_lookup.dart bundleid=com.google.Maps
 ```
 Results:
 ```
-upgrader: download: https://itunes.apple.com/lookup?bundleId=com.google.Maps
-upgrader: response statusCode: 200
+upgrader_modeck: download: https://itunes.apple.com/lookup?bundleId=com.google.Maps
+upgrader_modeck: response statusCode: 200
 itunes_lookup bundleId: com.google.Maps
 itunes_lookup releaseNotes: Thanks for using Google Maps!
 itunes_lookup trackViewUrl: https://apps.apple.com/us/app/google-maps-transit-food/id585027354?uo=4
@@ -412,35 +412,35 @@ itunes_lookup all results:
 
 ## Reporting Issues
 
-Please submit issue reports [here on GitHub](https://github.com/larryaasen/upgrader/issues/new/choose).
-To better assist in analyzing issues, please include all of the `upgrader` log, which should look something like this:
+Please submit issue reports [here on GitHub](https://github.com/larryaasen/upgrader_modeck/issues/new/choose).
+To better assist in analyzing issues, please include all of the `upgrader_modeck` log, which should look something like this:
 ```
-flutter: upgrader: languageCode: en
-flutter: upgrader: build UpgradeAlert
-flutter: upgrader: default operatingSystem: ios 11.4
-flutter: upgrader: operatingSystem: ios
-flutter: upgrader: platform: TargetPlatform.iOS
-flutter: upgrader: package info packageName: com.google.Maps
-flutter: upgrader: package info appName: Upgrader
-flutter: upgrader: package info version: 1.0.0
-flutter: upgrader: countryCode: US
-flutter: upgrader: blocked: false
-flutter: upgrader: debugDisplayAlways: false
-flutter: upgrader: debugDisplayOnce: false
-flutter: upgrader: hasAlerted: false
-flutter: upgrader: appStoreVersion: 5.81
-flutter: upgrader: installedVersion: 1.0.0
-flutter: upgrader: minAppVersion: null
-flutter: upgrader: isUpdateAvailable: true
-flutter: upgrader: shouldDisplayUpgrade: true
-flutter: upgrader: shouldDisplayReleaseNotes: true
-flutter: upgrader: showDialog title: Update App?
-flutter: upgrader: showDialog message: A new version of Upgrader is available! Version 5.81 is now available-you have 1.0.0.
-flutter: upgrader: showDialog releaseNotes: Thanks for using Google Maps! This release brings bug fixes that improve our product to help you discover new places and navigate to them.
+flutter: upgrader_modeck: languageCode: en
+flutter: upgrader_modeck: build UpgradeAlert
+flutter: upgrader_modeck: default operatingSystem: ios 11.4
+flutter: upgrader_modeck: operatingSystem: ios
+flutter: upgrader_modeck: platform: TargetPlatform.iOS
+flutter: upgrader_modeck: package info packageName: com.google.Maps
+flutter: upgrader_modeck: package info appName: Upgrader
+flutter: upgrader_modeck: package info version: 1.0.0
+flutter: upgrader_modeck: countryCode: US
+flutter: upgrader_modeck: blocked: false
+flutter: upgrader_modeck: debugDisplayAlways: false
+flutter: upgrader_modeck: debugDisplayOnce: false
+flutter: upgrader_modeck: hasAlerted: false
+flutter: upgrader_modeck: appStoreVersion: 5.81
+flutter: upgrader_modeck: installedVersion: 1.0.0
+flutter: upgrader_modeck: minAppVersion: null
+flutter: upgrader_modeck: isUpdateAvailable: true
+flutter: upgrader_modeck: shouldDisplayUpgrade: true
+flutter: upgrader_modeck: shouldDisplayReleaseNotes: true
+flutter: upgrader_modeck: showDialog title: Update App?
+flutter: upgrader_modeck: showDialog message: A new version of Upgrader is available! Version 5.81 is now available-you have 1.0.0.
+flutter: upgrader_modeck: showDialog releaseNotes: Thanks for using Google Maps! This release brings bug fixes that improve our product to help you discover new places and navigate to them.
 ```
-Also, please include the upgrader version number from the pubspec.lock file, which should look something like this:
+Also, please include the upgrader_modeck version number from the pubspec.lock file, which should look something like this:
 ```
-  upgrader:
+  upgrader_modeck:
     dependency: "direct main"
     description:
       path: ".."
@@ -451,8 +451,8 @@ Also, please include the upgrader version number from the pubspec.lock file, whi
 
 
 ## Contributing
-All [comments](https://github.com/larryaasen/upgrader/issues) and [pull requests](https://github.com/larryaasen/upgrader/pulls) are welcome.
+All [comments](https://github.com/larryaasen/upgrader_modeck/issues) and [pull requests](https://github.com/larryaasen/upgrader_modeck/pulls) are welcome.
 
 ## Donations / Sponsor
 
-Please sponsor or donate to the creator of `upgrader` on [Flattr](https://flattr.com/@larryaasen) or [Patreon](https://www.patreon.com/larryaasen).
+Please sponsor or donate to the creator of `upgrader_modeck` on [Flattr](https://flattr.com/@larryaasen) or [Patreon](https://www.patreon.com/larryaasen).

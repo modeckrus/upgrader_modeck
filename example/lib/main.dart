@@ -3,7 +3,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

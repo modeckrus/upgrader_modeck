@@ -3,7 +3,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
           appBar: AppBar(title: Text('Upgrader Subclass Example')),
           body: UpgradeAlert(
-            upgrader: MyUpgrader(),
+            upgrader_modeck: MyUpgrader(),
             child: Center(child: Text('Checking...')),
           )),
     );

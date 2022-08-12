@@ -4,7 +4,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/dom.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 import 'package:version/version.dart';
 
 import 'mock_play_store_client.dart';

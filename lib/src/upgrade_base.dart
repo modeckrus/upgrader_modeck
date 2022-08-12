@@ -3,13 +3,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 
 class UpgradeBase extends StatefulWidget {
   /// The upgraders used to configure the upgrade dialog.
-  final Upgrader upgrader;
+  final Upgrader upgrader_modeck;
 
-  const UpgradeBase(this.upgrader, {Key? key}) : super(key: key);
+  const UpgradeBase(this.upgrader_modeck, {Key? key}) : super(key: key);
 
   Widget build(BuildContext context, UpgradeBaseState state) {
     return Container();
@@ -20,7 +20,7 @@ class UpgradeBase extends StatefulWidget {
 }
 
 class UpgradeBaseState extends State<UpgradeBase> {
-  Future<bool> get initialized => widget.upgrader.initialize();
+  Future<bool> get initialized => widget.upgrader_modeck.initialize();
 
   @override
   Widget build(BuildContext context) => widget.build(context, this);

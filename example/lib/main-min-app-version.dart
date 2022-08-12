@@ -3,7 +3,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appcastURL =
-        'https://raw.githubusercontent.com/larryaasen/upgrader/master/test/testappcast.xml';
+        'https://raw.githubusercontent.com/larryaasen/upgrader_modeck/master/test/testappcast.xml';
     final cfg = AppcastConfiguration(url: appcastURL, supportedOS: ['android']);
 
     return MaterialApp(
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
           appBar: AppBar(title: Text('Upgrader Example')),
           body: UpgradeAlert(
-            upgrader: Upgrader(
+            upgrader_modeck: Upgrader(
               appcastConfig: cfg,
               debugLogging: true,
               minAppVersion: '1.1.0',

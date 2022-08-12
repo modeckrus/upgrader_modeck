@@ -85,7 +85,7 @@ class Upgrader {
   /// Duration until alerting user again
   final Duration durationUntilAlertAgain;
 
-  /// The localized messages used for display in upgrader.
+  /// The localized messages used for display in upgrader_modeck.
   UpgraderMessages messages;
 
   /// The minimum app version supported by this app. Earlier versions of this app
@@ -173,7 +173,7 @@ class Upgrader {
   })  : client = client ?? http.Client(),
         messages = messages ?? UpgraderMessages(),
         platform = platform ?? defaultTargetPlatform {
-    if (debugLogging) print("upgrader: instantiated.");
+    if (debugLogging) print("upgrader_modeck: instantiated.");
   }
 
   /// A shared instance of [Upgrader].
@@ -200,19 +200,19 @@ class Upgrader {
     _initCalled = true;
 
     if (messages.languageCode.isEmpty) {
-      print('upgrader: error -> languageCode is empty');
+      print('upgrader_modeck: error -> languageCode is empty');
     } else if (debugLogging) {
-      print('upgrader: languageCode: ${messages.languageCode}');
+      print('upgrader_modeck: languageCode: ${messages.languageCode}');
     }
 
     await _getSavedPrefs();
 
     if (debugLogging) {
-      print('upgrader: default operatingSystem: '
+      print('upgrader_modeck: default operatingSystem: '
           '${UpgradeIO.operatingSystem} ${UpgradeIO.operatingSystemVersion}');
-      print('upgrader: operatingSystem: $operatingSystem');
-      print('upgrader: platform: $platform');
-      print('upgrader: '
+      print('upgrader_modeck: operatingSystem: $operatingSystem');
+      print('upgrader_modeck: platform: $platform');
+      print('upgrader_modeck: '
           'isAndroid: ${UpgradeIO.isAndroid}, '
           'isIOS: ${UpgradeIO.isIOS}, '
           'isLinux: ${UpgradeIO.isLinux}, '
@@ -226,9 +226,9 @@ class Upgrader {
       _packageInfo = await PackageInfo.fromPlatform();
       if (debugLogging) {
         print(
-            'upgrader: package info packageName: ${_packageInfo!.packageName}');
-        print('upgrader: package info appName: ${_packageInfo!.appName}');
-        print('upgrader: package info version: ${_packageInfo!.version}');
+            'upgrader_modeck: package info packageName: ${_packageInfo!.packageName}');
+        print('upgrader_modeck: package info appName: ${_packageInfo!.appName}');
+        print('upgrader_modeck: package info version: ${_packageInfo!.version}');
       }
     }
 
@@ -243,14 +243,14 @@ class Upgrader {
     // If there is an appcast for this platform
     if (_isAppcastThisPlatform()) {
       if (debugLogging) {
-        print('upgrader: appcast is available for this platform');
+        print('upgrader_modeck: appcast is available for this platform');
       }
 
       final appcast = this.appcast ?? Appcast(client: client);
       await appcast.parseAppcastItemsFromUri(appcastConfig!.url!);
       if (debugLogging) {
         var count = appcast.items == null ? 0 : appcast.items!.length;
-        print('upgrader: appcast item count: $count');
+        print('upgrader_modeck: appcast item count: $count');
       }
       final bestItem = appcast.bestItem();
       if (bestItem != null &&
@@ -258,7 +258,7 @@ class Upgrader {
           bestItem.versionString!.isNotEmpty) {
         if (debugLogging) {
           print(
-              'upgrader: appcast best item version: ${bestItem.versionString}');
+              'upgrader_modeck: appcast best item version: ${bestItem.versionString}');
         }
         _appStoreVersion ??= bestItem.versionString;
         _appStoreListingURL ??= bestItem.fileURL;
@@ -275,7 +275,7 @@ class Upgrader {
       // The  country code of the locale, defaulting to `US`.
       final country = countryCode ?? findCountryCode();
       if (debugLogging) {
-        print('upgrader: countryCode: $country');
+        print('upgrader_modeck: countryCode: $country');
       }
 
       // Get Android version from Google Play Store, or
@@ -296,7 +296,7 @@ class Upgrader {
           if (mav != null) {
             minAppVersion = mav.toString();
             if (debugLogging) {
-              print('upgrader: ITunesResults.minAppVersion: $minAppVersion');
+              print('upgrader_modeck: ITunesResults.minAppVersion: $minAppVersion');
             }
           }
         }
@@ -379,7 +379,7 @@ class Upgrader {
       final shouldDisplay = shouldDisplayUpgrade();
       if (debugLogging) {
         print(
-            'upgrader: shouldDisplayReleaseNotes: ${shouldDisplayReleaseNotes()}');
+            'upgrader_modeck: shouldDisplayReleaseNotes: ${shouldDisplayReleaseNotes()}');
       }
       if (shouldDisplay) {
         _displayed = true;
@@ -403,10 +403,10 @@ class Upgrader {
     final isBlocked = blocked();
 
     if (debugLogging) {
-      print('upgrader: blocked: $isBlocked');
-      print('upgrader: debugDisplayAlways: $debugDisplayAlways');
-      print('upgrader: debugDisplayOnce: $debugDisplayOnce');
-      print('upgrader: hasAlerted: $_hasAlerted');
+      print('upgrader_modeck: blocked: $isBlocked');
+      print('upgrader_modeck: debugDisplayAlways: $debugDisplayAlways');
+      print('upgrader_modeck: debugDisplayOnce: $debugDisplayOnce');
+      print('upgrader_modeck: hasAlerted: $_hasAlerted');
     }
 
     // If installed version is below minimum app version, or is a critical update,
@@ -426,7 +426,7 @@ class Upgrader {
       rv = false;
     }
     if (debugLogging) {
-      print('upgrader: shouldDisplayUpgrade: $rv');
+      print('upgrader_modeck: shouldDisplayUpgrade: $rv');
     }
 
     // Call the [willDisplayUpgrade] callback when available.
@@ -464,7 +464,7 @@ class Upgrader {
     final lastAlertedDuration = DateTime.now().difference(_lastTimeAlerted!);
     final rv = lastAlertedDuration < durationUntilAlertAgain;
     if (rv && debugLogging) {
-      print('upgrader: isTooSoon: true');
+      print('upgrader_modeck: isTooSoon: true');
     }
     return rv;
   }
@@ -473,19 +473,19 @@ class Upgrader {
     final rv =
         _userIgnoredVersion != null && _userIgnoredVersion == _appStoreVersion;
     if (rv && debugLogging) {
-      print('upgrader: alreadyIgnoredThisVersion: true');
+      print('upgrader_modeck: alreadyIgnoredThisVersion: true');
     }
     return rv;
   }
 
   bool isUpdateAvailable() {
     if (debugLogging) {
-      print('upgrader: appStoreVersion: $_appStoreVersion');
-      print('upgrader: installedVersion: $_installedVersion');
-      print('upgrader: minAppVersion: $minAppVersion');
+      print('upgrader_modeck: appStoreVersion: $_appStoreVersion');
+      print('upgrader_modeck: installedVersion: $_installedVersion');
+      print('upgrader_modeck: minAppVersion: $minAppVersion');
     }
     if (_appStoreVersion == null || _installedVersion == null) {
-      if (debugLogging) print('upgrader: isUpdateAvailable: false');
+      if (debugLogging) print('upgrader_modeck: isUpdateAvailable: false');
       return false;
     }
 
@@ -497,11 +497,11 @@ class Upgrader {
         final available = appStoreVersion > installedVersion;
         _updateAvailable = available ? _appStoreVersion : null;
       } on Exception catch (e) {
-        print('upgrader: isUpdateAvailable: $e');
+        print('upgrader_modeck: isUpdateAvailable: $e');
       }
     }
     final isAvailable = _updateAvailable != null;
-    if (debugLogging) print('upgrader: isUpdateAvailable: $isAvailable');
+    if (debugLogging) print('upgrader_modeck: isUpdateAvailable: $isAvailable');
     return isAvailable;
   }
 
@@ -533,9 +533,9 @@ class Upgrader {
       required String? releaseNotes,
       required bool canDismissDialog}) {
     if (debugLogging) {
-      print('upgrader: showDialog title: $title');
-      print('upgrader: showDialog message: $message');
-      print('upgrader: showDialog releaseNotes: $releaseNotes');
+      print('upgrader_modeck: showDialog title: $title');
+      print('upgrader_modeck: showDialog message: $message');
+      print('upgrader_modeck: showDialog releaseNotes: $releaseNotes');
     }
 
     // Save the date/time as the last time alerted.
@@ -560,12 +560,12 @@ class Upgrader {
   /// the screen to be popped. Defaults to false.
   bool _shouldPopScope() {
     if (debugLogging) {
-      print('upgrader: onWillPop called');
+      print('upgrader_modeck: onWillPop called');
     }
     if (shouldPopScope != null) {
       final should = shouldPopScope!();
       if (debugLogging) {
-        print('upgrader: shouldPopScope=$should');
+        print('upgrader_modeck: shouldPopScope=$should');
       }
       return should;
     }
@@ -673,7 +673,7 @@ class Upgrader {
 
   void onUserIgnored(BuildContext context, bool shouldPop) {
     if (debugLogging) {
-      print('upgrader: button tapped: ignore');
+      print('upgrader_modeck: button tapped: ignore');
     }
 
     // If this callback has been provided, call it.
@@ -693,7 +693,7 @@ class Upgrader {
 
   void onUserLater(BuildContext context, bool shouldPop) {
     if (debugLogging) {
-      print('upgrader: button tapped: later');
+      print('upgrader_modeck: button tapped: later');
     }
 
     // If this callback has been provided, call it.
@@ -711,7 +711,7 @@ class Upgrader {
 
   void onUserUpdated(BuildContext context, bool shouldPop) {
     if (debugLogging) {
-      print('upgrader: button tapped: update now');
+      print('upgrader_modeck: button tapped: update now');
     }
 
     // If this callback has been provided, call it.
@@ -780,13 +780,13 @@ class Upgrader {
   void _sendUserToAppStore() async {
     if (_appStoreListingURL == null || _appStoreListingURL!.isEmpty) {
       if (debugLogging) {
-        print('upgrader: empty _appStoreListingURL');
+        print('upgrader_modeck: empty _appStoreListingURL');
       }
       return;
     }
 
     if (debugLogging) {
-      print('upgrader: launching: $_appStoreListingURL');
+      print('upgrader_modeck: launching: $_appStoreListingURL');
     }
 
     if (await canLaunchUrl(Uri.parse(_appStoreListingURL!))) {
@@ -797,7 +797,7 @@ class Upgrader {
                 : LaunchMode.platformDefault);
       } catch (e) {
         if (debugLogging) {
-          print('upgrader: launch to app store failed: $e');
+          print('upgrader_modeck: launch to app store failed: $e');
         }
       }
     } else {}

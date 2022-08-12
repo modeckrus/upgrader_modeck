@@ -3,7 +3,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 
 /// A widget to display the upgrade card.
 class UpgradeCard extends UpgradeBase {
@@ -15,13 +15,13 @@ class UpgradeCard extends UpgradeBase {
 
   /// Creates a new [UpgradeCard].
   UpgradeCard(
-      {Key? key, Upgrader? upgrader, this.margin = const EdgeInsets.all(4.0)})
-      : super(upgrader ?? Upgrader.sharedInstance, key: key);
+      {Key? key, Upgrader? upgrader_modeck, this.margin = const EdgeInsets.all(4.0)})
+      : super(upgrader_modeck ?? Upgrader.sharedInstance, key: key);
 
   /// Describes the part of the user interface represented by this widget.
   @override
   Widget build(BuildContext context, UpgradeBaseState state) {
-    if (upgrader.debugLogging) {
+    if (upgrader_modeck.debugLogging) {
       print('UpgradeCard: build UpgradeCard');
     }
 
@@ -31,13 +31,13 @@ class UpgradeCard extends UpgradeBase {
           if (processed.connectionState == ConnectionState.done &&
               processed.data != null &&
               processed.data!) {
-            if (upgrader.shouldDisplayUpgrade()) {
-              final title = upgrader.messages.message(UpgraderMessage.title);
-              final message = upgrader.message();
-              final releaseNotes = upgrader.releaseNotes;
+            if (upgrader_modeck.shouldDisplayUpgrade()) {
+              final title = upgrader_modeck.messages.message(UpgraderMessage.title);
+              final message = upgrader_modeck.message();
+              final releaseNotes = upgrader_modeck.releaseNotes;
               final shouldDisplayReleaseNotes =
-                  upgrader.shouldDisplayReleaseNotes();
-              if (upgrader.debugLogging) {
+                  upgrader_modeck.shouldDisplayReleaseNotes();
+              if (upgrader_modeck.debugLogging) {
                 print('UpgradeCard: will display');
                 print('UpgradeCard: showDialog title: $title');
                 print('UpgradeCard: showDialog message: $message');
@@ -84,51 +84,51 @@ class UpgradeCard extends UpgradeBase {
                           Text(message),
                           Padding(
                               padding: const EdgeInsets.only(top: 15.0),
-                              child: Text(upgrader.messages
+                              child: Text(upgrader_modeck.messages
                                       .message(UpgraderMessage.prompt) ??
                                   '')),
                           if (notes != null) notes,
                         ],
                       ),
                       actions: <Widget>[
-                        if (upgrader.showIgnore)
+                        if (upgrader_modeck.showIgnore)
                           TextButton(
-                              child: Text(upgrader.messages.message(
+                              child: Text(upgrader_modeck.messages.message(
                                       UpgraderMessage.buttonTitleIgnore) ??
                                   ''),
                               onPressed: () {
                                 // Save the date/time as the last time alerted.
-                                upgrader.saveLastAlerted();
+                                upgrader_modeck.saveLastAlerted();
 
-                                upgrader.onUserIgnored(context, false);
+                                upgrader_modeck.onUserIgnored(context, false);
                                 state.forceUpdateState();
                               }),
-                        if (upgrader.showLater)
+                        if (upgrader_modeck.showLater)
                           TextButton(
-                              child: Text(upgrader.messages.message(
+                              child: Text(upgrader_modeck.messages.message(
                                       UpgraderMessage.buttonTitleLater) ??
                                   ''),
                               onPressed: () {
                                 // Save the date/time as the last time alerted.
-                                upgrader.saveLastAlerted();
+                                upgrader_modeck.saveLastAlerted();
 
-                                upgrader.onUserLater(context, false);
+                                upgrader_modeck.onUserLater(context, false);
                                 state.forceUpdateState();
                               }),
                         TextButton(
-                            child: Text(upgrader.messages.message(
+                            child: Text(upgrader_modeck.messages.message(
                                     UpgraderMessage.buttonTitleUpdate) ??
                                 ''),
                             onPressed: () {
                               // Save the date/time as the last time alerted.
-                              upgrader.saveLastAlerted();
+                              upgrader_modeck.saveLastAlerted();
 
-                              upgrader.onUserUpdated(context, false);
+                              upgrader_modeck.onUserUpdated(context, false);
                               state.forceUpdateState();
                             }),
                       ]));
             } else {
-              if (upgrader.debugLogging) {
+              if (upgrader_modeck.debugLogging) {
                 print('UpgradeCard: will not display');
               }
             }

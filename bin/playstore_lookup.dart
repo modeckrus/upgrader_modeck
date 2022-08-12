@@ -7,8 +7,8 @@
   $  dart playstore_lookup.dart id=com.google.android.apps.mapslite
  */
 
-import 'package:upgrader/src/itunes_search_api.dart';
-import 'package:upgrader/src/play_store_search_api.dart';
+import 'package:upgrader_modeck/src/itunes_search_api.dart';
+import 'package:upgrader_modeck/src/play_store_search_api.dart';
 
 void main(List<String> arguments) async {
   const defaultLookupBundleId = 'com.google.Maps';

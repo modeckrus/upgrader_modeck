@@ -5,7 +5,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 
 // Create a MockClient using the Mock class provided by the Mockito package.
 // We will create a new instances of this class in each test.
@@ -50,7 +50,7 @@ class MockITunesSearchClient {
         return http.Response(response, 200);
       }
       if (url ==
-          ITunesSearchAPI().lookupURLByBundleId('com.larryaasen.upgrader',
+          ITunesSearchAPI().lookupURLByBundleId('com.larryaasen.upgrader_modeck',
               country: country, useCacheBuster: false)) {
         return http.Response(response, 200);
       }

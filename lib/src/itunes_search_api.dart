@@ -38,19 +38,19 @@ class ITunesSearchAPI {
     final url = lookupURLByBundleId(bundleId,
         country: country ??= '', useCacheBuster: useCacheBuster)!;
     if (debugEnabled) {
-      print('upgrader: download: $url');
+      print('upgrader_modeck: download: $url');
     }
 
     try {
       final response = await client!.get(Uri.parse(url));
       if (debugEnabled) {
-        print('upgrader: response statusCode: ${response.statusCode}');
+        print('upgrader_modeck: response statusCode: ${response.statusCode}');
       }
 
       final decodedResults = _decodeResults(response.body);
       return decodedResults;
     } catch (e) {
-      print('upgrader: lookupByBundleId exception: $e');
+      print('upgrader_modeck: lookupByBundleId exception: $e');
       return null;
     }
   }
@@ -127,7 +127,7 @@ class ITunesSearchAPI {
         if (resultCount == 0) {
           if (debugEnabled) {
             print(
-                'upgrader.ITunesSearchAPI: results are empty: $decodedResults');
+                'upgrader_modeck.ITunesSearchAPI: results are empty: $decodedResults');
           }
         }
         return decodedResults;
@@ -144,7 +144,7 @@ class ITunesResults {
     try {
       value = response['results'][0]['bundleId'];
     } catch (e) {
-      print('upgrader.ITunesResults.bundleId: $e');
+      print('upgrader_modeck.ITunesResults.bundleId: $e');
     }
     return value;
   }
@@ -155,7 +155,7 @@ class ITunesResults {
     try {
       value = response['results'][0]['currency'];
     } catch (e) {
-      print('upgrader.ITunesResults.currency: $e');
+      print('upgrader_modeck.ITunesResults.currency: $e');
     }
     return value;
   }
@@ -166,7 +166,7 @@ class ITunesResults {
     try {
       value = response['results'][0]['description'];
     } catch (e) {
-      print('upgrader.ITunesResults.description: $e');
+      print('upgrader_modeck.ITunesResults.description: $e');
     }
     return value;
   }
@@ -190,12 +190,12 @@ class ITunesResults {
             // Verify version string using class Version
             version = Version.parse(mav);
           } on Exception catch (e) {
-            print('upgrader: ITunesResults.minAppVersion: $tagName error: $e');
+            print('upgrader_modeck: ITunesResults.minAppVersion: $tagName error: $e');
           }
         }
       }
     } on Exception catch (e) {
-      print('upgrader.ITunesResults.minAppVersion : $e');
+      print('upgrader_modeck.ITunesResults.minAppVersion : $e');
     }
     return version;
   }
@@ -206,7 +206,7 @@ class ITunesResults {
     try {
       value = response['results'][0]['releaseNotes'];
     } catch (e) {
-      print('upgrader.ITunesResults.releaseNotes: $e');
+      print('upgrader_modeck.ITunesResults.releaseNotes: $e');
     }
     return value;
   }
@@ -217,7 +217,7 @@ class ITunesResults {
     try {
       value = response['results'][0]['trackViewUrl'];
     } catch (e) {
-      print('upgrader.ITunesResults.trackViewUrl: $e');
+      print('upgrader_modeck.ITunesResults.trackViewUrl: $e');
     }
     return value;
   }
@@ -228,7 +228,7 @@ class ITunesResults {
     try {
       value = response['results'][0]['version'];
     } catch (e) {
-      print('upgrader.ITunesResults.version: $e');
+      print('upgrader_modeck.ITunesResults.version: $e');
     }
     return value;
   }

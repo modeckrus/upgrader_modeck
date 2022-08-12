@@ -4,8 +4,8 @@
 import 'dart:io';
 
 import 'package:mockito/mockito.dart';
-import 'package:upgrader/src/appcast.dart';
-import 'package:upgrader/src/upgrader.dart';
+import 'package:upgrader_modeck/src/appcast.dart';
+import 'package:upgrader_modeck/src/upgrader_modeck.dart';
 
 import 'appcast_test.dart';
 

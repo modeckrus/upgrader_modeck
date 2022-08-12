@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 /// with `!` and `?` to support older versions of the API as well.
 T? ambiguate<T>(T? value) => value;
 
-/// The message identifiers used in upgrader.
+/// The message identifiers used in upgrader_modeck.
 enum UpgraderMessage {
   /// Body of the upgrade message
   body,
@@ -34,7 +34,7 @@ enum UpgraderMessage {
   title,
 }
 
-/// The default localized messages used for display in upgrader. Extend this
+/// The default localized messages used for display in upgrader_modeck. Extend this
 /// class to provide custom values and new localizations for languages.
 /// An example to replace the Ignore button with a custom value would be:
 ///

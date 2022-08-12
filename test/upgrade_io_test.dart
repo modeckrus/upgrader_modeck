@@ -3,7 +3,7 @@
  */
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:upgrader_modeck/upgrader_modeck.dart';
 
 void main() {
   test('testing UpgradeIO', () async {
